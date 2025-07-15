@@ -1,0 +1,84 @@
+version: '3.8'
+
+services:
+  leap_hand_sim:
+    build:
+      context: ./LEAP_Hand_Sim
+      dockerfile: Dockerfile
+    container_name: leap_hand_sim
+    hostname: leap_hand_sim
+    environment:
+      - DISPLAY=${DISPLAY}
+      - XAUTHORITY=/tmp/.docker.xauth
+      - ROS_MASTER_URI=http://leap_hand_sim:11311
+      - ROS_HOSTNAME=leap_hand_sim
+      - TZ=Asia/Tokyo
+    volumes:
+      - ./shared:/workspace/shared:rw
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - /tmp/.docker.xauth:/tmp/.docker.xauth:rw
+      - /dev:/dev
+      - ./LEAP_Hand_Sim:/workspace/LEAP_Hand_Sim:rw
+    working_dir: /workspace/LEAP_Hand_Sim
+    privileged: true
+    shm_size: 16g
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    networks:
+      - rosnet
+    stdin_open: true
+    tty: true
+
+  neuralfeels:
+    build:
+      context: ./neuralfeels
+      dockerfile: Dockerfile
+    container_name: neuralfeels
+    hostname: neuralfeels
+    environment:
+      - DISPLAY=${DISPLAY}
+      - XAUTHORITY=/tmp/.docker.xauth
+      - ROS_MASTER_URI=http://leap_hand_sim:11311
+      - ROS_HOSTNAME=neuralfeels
+      - TZ=Asia/Tokyo
+    volumes:
+      - ./shared:/workspace/shared:rw
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - /tmp/.docker.xauth:/tmp/.docker.xauth:rw
+      - /dev:/dev
+      - ./neuralfeels:/workspace/neuralfeels:rw
+    working_dir: /workspace/neuralfeels
+    privileged: true
+    shm_size: 16g
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    networks:
+      - rosnet
+    stdin_open: true
+    tty: true
+
+networks:
+  rosnet:
+    driver: bridge
+
+# Usage notes:
+# 1. Before running, create X11 auth file if not present:
+#    xauth nlist $DISPLAY | sed -e 's/^..../ffff/' | xauth -f /tmp/.docker.xauth nmerge -
+#    xhost +local:docker
+# 2. Create ./shared directory for shared data.
+# 3. Run: docker compose up --build
+# 4. In leap_hand_sim container, start roscore and ROS nodes.
+# 5. In neuralfeels container, start ROS nodes as needed.
+# 6. Both containers have /workspace/shared mounted for data exchange.
+# 7. Both containers have X11 forwarding for GUI tools (rviz, etc.).
+# 8. Both containers have GPU access (NVIDIA runtime required). 
