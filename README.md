@@ -1,4 +1,4 @@
-# NeuralFeels with Leap Hand in Real
+# NeuralFeels with LEAP Hand in Real
 
 ## Installation
 ```bash
