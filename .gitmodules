@@ -1,0 +1,6 @@
+[submodule "LEAP_Hand_Sim"]
+	path = LEAP_Hand_Sim
+	url = git@github.com:tatsukamijo/LEAP_Hand_Sim.git
+[submodule "neuralfeels"]
+	path = neuralfeels
+	url = git@github.com:tatsukamijo/neuralfeels.git
