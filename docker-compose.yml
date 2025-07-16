@@ -16,6 +16,7 @@ services:
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
       - /tmp/.docker.xauth:/tmp/.docker.xauth:rw
       - /dev:/dev
+      - /run/udev:/run/udev:ro
       - ./LEAP_Hand_Sim:/workspace/LEAP_Hand_Sim:rw
       - ./catkin_ws:/workspace/catkin_ws:rw
     working_dir: /workspace/LEAP_Hand_Sim
@@ -51,6 +52,7 @@ services:
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
       - /tmp/.docker.xauth:/tmp/.docker.xauth:rw
       - /dev:/dev
+      - /run/udev:/run/udev:ro
       - ./neuralfeels:/workspace/neuralfeels:rw
       - ./catkin_ws:/workspace/catkin_ws:rw
       - ${DATASET_PATH}:/workspace/neuralfeels/data:rw
