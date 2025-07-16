@@ -14,14 +14,22 @@ import time
 
 FRAME_RATE = 30
 ENCODING = 'rgb8'
+# Mapping from serial to desired digit index (thumb=0, index=1, middle=2, ring=3)
+SERIAL_TO_INDEX = {
+    'D20262': 0,  # thumb
+    'D20219': 1,  # index
+    'D20236': 2,  # middle
+    'D20261': 3,  # ring
+}
 EXPECTED_SERIALS = ['D20262', 'D20219', 'D20236', 'D20221']
 
 
-def digit_publish_worker(idx, serial, dev_name, stop_event):
+def digit_publish_worker(serial, dev_name, stop_event):
     try:
         digit = Digit(serial)
         digit.connect()
         bridge = CvBridge()
+        idx = SERIAL_TO_INDEX[serial]
         topic = f"/digit/{idx}/image_raw"
         pub = rospy.Publisher(topic, Image, queue_size=1)
         rate = rospy.Rate(FRAME_RATE)
@@ -67,10 +75,10 @@ def main():
     stop_event = threading.Event()
     threads = []
     started = 0
-    for idx, d in enumerate(selected_digits):
+    for d in selected_digits:
         serial = d['serial']
         dev_name = d.get('dev_name', 'unknown')
-        t = threading.Thread(target=digit_publish_worker, args=(idx, serial, dev_name, stop_event), daemon=True)
+        t = threading.Thread(target=digit_publish_worker, args=(serial, dev_name, stop_event), daemon=True)
         threads.append(t)
         t.start()
         started += 1
