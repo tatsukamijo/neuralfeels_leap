@@ -201,3 +201,29 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# ROS1/catkin workspace
+build/
+devel/
+install/
+logs/
+*.log
+*.bag
+*.launch.pyc
+*.test
+
+# ROS catkin tools
+.catkin_tools/
+.catkin_workspace
+.rosinstall
+
+# ROS node logs
+*.pyc
+*.swp
+
+# ROS generated files
+msg_gen/
+srv_gen/
+
+# ROS .ros folder (if present in repo)
+.ros/
