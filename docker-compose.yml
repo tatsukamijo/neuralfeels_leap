@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   leap_hand_sim:
     build:
@@ -19,6 +17,7 @@ services:
       - /tmp/.docker.xauth:/tmp/.docker.xauth:rw
       - /dev:/dev
       - ./LEAP_Hand_Sim:/workspace/LEAP_Hand_Sim:rw
+      - ./catkin_ws:/workspace/catkin_ws:rw
     working_dir: /workspace/LEAP_Hand_Sim
     privileged: true
     shm_size: 16g
@@ -46,12 +45,15 @@ services:
       - ROS_MASTER_URI=http://leap_hand_sim:11311
       - ROS_HOSTNAME=neuralfeels
       - TZ=Asia/Tokyo
+      - DATASET_PATH=${DATASET_PATH}
     volumes:
       - ./shared:/workspace/shared:rw
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
       - /tmp/.docker.xauth:/tmp/.docker.xauth:rw
       - /dev:/dev
       - ./neuralfeels:/workspace/neuralfeels:rw
+      - ./catkin_ws:/workspace/catkin_ws:rw
+      - ${DATASET_PATH}:/workspace/neuralfeels/data:rw
     working_dir: /workspace/neuralfeels
     privileged: true
     shm_size: 16g
