@@ -21,7 +21,7 @@ SERIAL_TO_INDEX = {
     'D20236': 2,  # middle
     'D20261': 3,  # ring
 }
-EXPECTED_SERIALS = ['D20262', 'D20219', 'D20236', 'D20221']
+EXPECTED_SERIALS = ['D20262', 'D20219', 'D20236', 'D20261']
 
 
 def digit_publish_worker(serial, dev_name, stop_event):
