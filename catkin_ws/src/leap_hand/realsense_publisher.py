@@ -23,13 +23,15 @@ def get_camera_info(color_intrinsics):
     camera_info.D = list(color_intrinsics.coeffs)
     
     # Rectification matrix (identity for no rectification)
-    camera_info.R = [1, 0, 0, 0, 0, 1]
+    camera_info.R = [1, 0, 0,
+                     0, 1, 0,
+                     0, 0, 1]
     
     # Projection matrix
     camera_info.P = [
         color_intrinsics.fx, 0, color_intrinsics.ppx, 0,
       0, color_intrinsics.fy, color_intrinsics.ppy, 0,
-       0, 1, 0
+       0, 0, 1, 0
     ]
     
     return camera_info
